@@ -21,6 +21,7 @@ c=conn.cursor()
 
 api_key='AIzaSyDjF6w3QnVjpYhMjA6oIy3pf-12BKbMRgI'
 channel_ids=[channelID]
+vid_id=vid_id
 youtube=build('youtube','v3', developerKey=api_key)
 
 def get_channel_stats(youtube, channel_ids): 
@@ -440,7 +441,6 @@ st.write('This channel has {}% positive influence on the audience in recent days
 from youtube_transcript_api import YouTubeTranscriptApi as yta
 import re
 
-vid_id=st.text_input('Please input a videoID to check the content quality of this channel')
 st.write('Make sure the subtitles of the video are enabled')
 data=yta.get_transcript(vid_id)
 

@@ -1,6 +1,5 @@
 import streamlit as st
 from PIL import Image
-#DB Management
 from googleapiclient.discovery import build
 import pandas as pd
 import re
@@ -39,20 +38,6 @@ def convertTobinary(photo):
         binarydata=f.read()
     return binarydata
 
-# def tabel_list():
-#     c.execute('CREATE TABLE IF NOT EXISTS tabel_list(company_name TEXT)')
-
-# def add_tabel_name(company_name_):
-#     c.execute('INSERT INTO tabel_list(company_name) VALUES(?)',(company_name_))
-#     conn.commit()
-
-# c.execute('DROP TABLE userstable')
-# def create_product_info_table():
-#     c.execute('CREATE TABLE IF NOT EXISTS Productinfo(product_name TEXT, info TEXT, launch_date TEXT, product_image BLOB)')
-#     conn.commit()
-# c.execute('DROP TABLE tabel_list')
-# c.execute('DROP TABLE channelid_list')
-#st.set_page_config(page_title="Login Page", page_icon=":tada:", layout="wide")
 def channelid_list():
     c.execute('CREATE TABLE IF NOT EXISTS channelid_list(chennel_id TEXT, company_name TEXT)')
 
@@ -62,6 +47,7 @@ def add_channel_id(chennel_id, company_name):
 
 def main():
     st.subheader("Welcome...!")
+    st.write("First go to the find influencer section and fill all the details then head to the influencer toggle button which is available right below this instruction and fil all the details there. Now, go to the influencer analysis section in the drop down menu below. provide the required information there and hit analyse.")
     if st.checkbox('Influencer'):
         c.execute('SELECT product_name,info,launch_date,username FROM userstable')
         show=c.fetchall()
@@ -86,57 +72,33 @@ def main():
 
     if choice=="Home":
         st.sidebar.title("Home")
-        # c.execute('INSERT INTO userstable(username, password, email) VALUES(?,?,?)',(username,password, email))
-        # conn.commit()
-        
-        # c.execute('SELECT * FROM channelid_list')
-        # data=c.fetchall()
-        # st.subheader(data)
 
     elif choice=="Login":
         st.sidebar.title("Please login here")
-
-
         email=st.sidebar.text_input("email")
         password=st.sidebar.text_input("Password",type="password")
-
-        
-
         if st.sidebar.checkbox("Login"):
-            
             create_usertable()
             result = login_user(email,password)
-           
             if result:
                 st.sidebar.success("Logged in as {}".format(email))
                 task=st.selectbox("Task",["Profile","Find influencer","Influencer Analysis"])
 
-                if task=="Profile":
-                    #direct to the profile.
-                    c.execute('SELECT username FROM userstable WHERE email=? AND password=?',(email,password))
-                    username1=c.fetchall()[0][0]
-                    myvar={'username':username1}
-#                     exec(open('profile.py').read(),myvar)
-                                    
-                
-                elif task=="Find influencer":
-                    #direct to the posting page.
-                    #exec(open('find_influencer.py').read())
-                    #c.execute('DROP TABLE Productinfo')
+                # if task=="Profile":
+                #     c.execute('SELECT username FROM userstable WHERE email=? AND password=?',(email,password))
+                #     username1=c.fetchall()[0][0]
+                #     myvar={'username':username1}
+                #     exec(open('profile.py').read(),myvar)
+                if task=="Find influencer":
                     st.title("Find influencer")
                     st.subheader('To find an influencer you should first create a post')
-                    company_name=st.text_input('Enter your company name')
+                    username=st.text_input('Enter your company name')
                     product_name=st.text_input('write your product name')
                     launch_date=st.text_input('launch date')
                     info=st.text_input('Write your product details here')
                     if st.checkbox('Save'):
                         add_productdata(product_name, info, launch_date,email)
                         st.write(info)
-
-                    # if st.checkbox("go"):
-                    #     exec(open('feed.py').read())
-                    
-
                 elif task=="Influencer Analysis":
                     st.subheader("Influencer Analysis")
                     youtube=build('youtube','v3', developerKey=api_key)
@@ -154,9 +116,7 @@ def main():
                             all_data.append(data)  
                             return pd.DataFrame(all_data)
                     channel_stats=[]
-
                     channelid_list()
-                    
                     st.write('Click on this box to see ranking of the bidders')
                     if st.checkbox('Check Rank'):
                         company_name=st.text_input('Write yout company name')
@@ -177,32 +137,23 @@ def main():
                                 ranklist['Total_videos']=pd.to_numeric(ranklist['Total_videos'])
                                 rank=ranklist.sort_values(['Views','Subscribers'], ascending=False)
                             rank[:10]
-                    
-                    #direct to the influencer analysis page.
                     global channelID
                     a=st.text_input('Provide a Channel ID')
+                    vid_id=st.text_input('Please input a videoID to check the content quality of this channel')
                     if st.checkbox('Analyze'):
-                        channelID={'channelID':a}
+                        channelID={'channelID':a, 'vid_id':vid_id}
                         exec(open('project/API.py').read(),channelID)
-
-            
             else:
                 st.warning("Inccorect Username/Password")
-        
     elif choice=="Sign up Here":
         st.sidebar.title("Create account here")
-        
         username=st.sidebar.text_input("Company Name")
         email=st.sidebar.text_input("Enter Email")
         password=st.sidebar.text_input("Password",type="password")
         confirmpassword=st.sidebar.text_input("ConfirmPassword",type="password")
-
         if st.sidebar.button("Create Account"):
             create_usertable()
             add_userdata(username,password,email)
             st.sidebar.success("Account created as {}".format(username))
-
-    
-
 if __name__=="__main__":
     main()
