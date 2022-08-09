@@ -21,6 +21,7 @@ c=conn.cursor()
 
 api_key='AIzaSyDjF6w3QnVjpYhMjA6oIy3pf-12BKbMRgI'
 channel_ids=[channelID]
+vid_id=vid_id
 youtube=build('youtube','v3', developerKey=api_key)
 
 def get_channel_stats(youtube, channel_ids): 
