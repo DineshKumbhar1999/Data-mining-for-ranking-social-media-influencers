@@ -181,8 +181,9 @@ def main():
                     #direct to the influencer analysis page.
                     global channelID
                     a=st.text_input('Provide a Channel ID')
+		    vid_id=st.text_input('Please input a videoID to check the content quality of this channel')
                     if st.checkbox('Analyze'):
-                        channelID={'channelID':a}
+                        channelID={'channelID':a, 'vid_id':vid_id}
                         exec(open('project/API.py').read(),channelID)
 
             
