@@ -471,10 +471,7 @@ obscene=[]
 identity_hate=[]
 insult=[]
 threat=[]
-funny=[]
-wow=[]
-sad=[]
-sexual_explicit=[]
+
 for i in script_data:
     input_str = vectorizer(i)
     res = model.predict(np.expand_dims(input_str,0))
@@ -484,10 +481,7 @@ for i in script_data:
     identity_hate.append(res[0][3])
     insult.append(res[0][4])
     threat.append(res[0][5])
-    funny.append(res[0][6])
-    wow.append(res[0][7])
-    sad.append(res[0][8])
-    sexual_explicit.append(res[0][9])
+  
 
 st.subheader("Prediction of the Speech/Script quality of the video")
 st.write('Toxicity: - {}%'.format(round((sum(toxic)/len(toxic))*5),3))
@@ -496,10 +490,7 @@ st.write('Obscene: - {}%'.format(round((sum(obscene)/len(obscene))*100),2))
 st.write('Identity hate: - {}%'.format(round((sum(identity_hate)/len(identity_hate))*100),2))
 st.write('Insult: - {}%'.format(round((sum(insult)/len(insult))*100),2))
 st.write('Threat: - {}%'.format(round((sum(threat)/len(threat))*100),2))
-st.write('Funny: - {}%'.format(round((sum(funny)/len(funny))*100),2))
-st.write('Wow: - {}%'.format(round((sum(wow)/len(wow))*100),2))
-st.write('Sad: - {}%'.format(round((sum(sad)/len(sad))*100),2))
-st.write('Sexual explicit: - {}%'.format(round((sum(sexual_explicit)/len(sexual_explicit))*100),2))
+
 
 # --------------------------------------------------------------------------------------------------------------------------------
 st.subheader("Currently this feature throws error because streamlit cloud has some trouble regarding opencv dependencies")
